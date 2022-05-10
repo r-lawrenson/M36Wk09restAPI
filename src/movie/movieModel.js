@@ -6,9 +6,9 @@ const movieSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    actors:[
+    actors: [
         {
-        type:String
+            type: String
         },
     ],
 });
