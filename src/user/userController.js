@@ -4,7 +4,7 @@ const User = require("./userModel");
 exports.signup = async (req, res) => {
   try {
     const newUser = await User.create(req.body);
-    res.status(200).send({ user: newUser.username });
+    res.status(200).send({ message: `${ newUser.username} has been created.`});
     // or return all details if successful
     // res.status(200).send({ user: newUser.username, email: newUser.email, pwd: newUser.pass });
   } catch (error) {
@@ -48,7 +48,7 @@ exports.deleteOneUser = async (req, res) => {
           res.status(404).send({ message: `user not found.` });
         } else {
           // if username exists then delete user
-          await User.deleteOne(id);
+          await user.deleteOne(id);
           console.log(`user ${user.email} deleted`);
           res.status(202).send({ message: `user ${user.email} deleted` });
         }
