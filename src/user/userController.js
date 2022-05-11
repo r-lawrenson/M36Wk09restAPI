@@ -18,9 +18,24 @@ exports.findOneUser = async (req, res) => {
   try {
     const users = await User.findOne(req.body);
     if(!users){
-      res.status(404).send(`username not found.`);
+      res.status(404).send({ message:`user was not found.` });
     } else {
-      res.status(200).send({ id: users.id, email: users.email, user: users.username });
+      res.status(200).send({ message: {id: users.id, email: users.email, user: users.username }});
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(550).send({ error: error.message });
+  }
+};
+
+// READ operation GET
+exports.listUsers = async (req, res) => {
+  try {
+    const users = await User.find({});
+    if(users){
+      res.status(404).send({ message:`no user data found.` });
+    } else {
+      res.status(200).send({ users });
     }
   } catch (error) {
     console.log(error);
