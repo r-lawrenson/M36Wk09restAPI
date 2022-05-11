@@ -5,7 +5,7 @@ const User = require("../user/userModel");
 exports.hashPass = async (req, res, next) => {
     const b = req.body
     try {
-        b.pass = await bcrypt.hash(b.pass, 8);
+        b.password = await bcrypt.hash(b.password, 8);
         next();
     } catch (error) {
         console.log(error);
@@ -18,7 +18,7 @@ exports.decrypt = async (req, res, next) => {
     try {
         const user = await User.findOne({username: b.username});
         if(user){
-            const result = await bcrypt.compare( b.password, user.pass );
+            const result = await bcrypt.compare( b.password, user.password );
             if(result) {
             // console.log(result);
               res.status(202).send(`${b.username} Logged in successfully`);
