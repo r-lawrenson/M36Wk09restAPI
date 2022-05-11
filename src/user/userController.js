@@ -27,16 +27,24 @@ exports.findOneUser = async (req, res) => {
 };
 
 exports.deleteOneUser = async (req, res) => {
+  // username AND password required
   const b = req.body;
   const id = req.params.id;
   try {
-    const user = await User.findOne({username: b.username}) ;
-    if(!user){
-      res.status(404).send(`username not found.`);
+    // check username and password are not null
+    if(!(b.username && b.password)) {
+      res.status(418).send({ error: "Enter a username AND password" });
     } else {
-      await User.findOneAndDelete(id)
-      console.log(`user ${user.username} deleted`);
-      res.status(202).send({message: `user ${user.username} deleted`});
+      const user = await User.findOne({username: b.username});
+        // check username exists in database
+        if(!user){
+          res.status(404).send(`username not found.`);
+        } else {
+          // if username exists then delete user
+          await User.findOneAndDelete(id)
+          console.log(`user ${user.username} deleted`);
+          res.status(202).send({message: `user ${user.username} deleted`});
+        }
     }
   } catch (error) {
     console.log(error);

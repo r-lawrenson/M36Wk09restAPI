@@ -2,7 +2,6 @@
 const bcrypt = require("bcryptjs");
 const User = require("../user/userModel");
 
-
 exports.hashPass = async (req, res, next) => {
     const b = req.body
     try {
