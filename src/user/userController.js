@@ -1,5 +1,6 @@
 const User = require("./userModel");
 
+// CREATE operation POST
 exports.signup = async (req, res) => {
   try {
     const newUser = await User.create(req.body);
@@ -12,6 +13,7 @@ exports.signup = async (req, res) => {
   }
 };
 
+// READ operation GET
 exports.findOneUser = async (req, res) => {
   try {
     const users = await User.findOne(req.body) 
@@ -26,24 +28,29 @@ exports.findOneUser = async (req, res) => {
   }
 };
 
+// UPDATE operation 
+
+
+// DELETE operation DELETE
 exports.deleteOneUser = async (req, res) => {
   // username AND password required
   const b = req.body;
   const id = req.params.id;
   try {
     // check username and password are not null
-    if(!(b.username && b.password)) {
-      res.status(418).send({ error: "Enter a username AND password" });
+    // OR email and password are not null
+    if(!(b.email && b.password)) {
+      res.status(418).send({ message: "Enter an email AND password" });
     } else {
-      const user = await User.findOne({username: b.username});
+      const user = await User.findOne({email: b.email});
         // check username exists in database
         if(!user){
-          res.status(404).send(`username not found.`);
+          res.status(404).send({ message: `user not found.` });
         } else {
           // if username exists then delete user
-          await User.findOneAndDelete(id)
-          console.log(`user ${user.username} deleted`);
-          res.status(202).send({message: `user ${user.username} deleted`});
+          await User.deleteOne(id);
+          console.log(`user ${user.email} deleted`);
+          res.status(202).send({ message: `user ${user.email} deleted` });
         }
     }
   } catch (error) {
