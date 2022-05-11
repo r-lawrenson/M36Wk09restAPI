@@ -37,17 +37,16 @@ exports.deleteOneUser = async (req, res) => {
   const b = req.body;
   const id = req.params.id;
   try {
-    // check username and password are not null
-    // OR email and password are not null
+    // check email and password are not null
     if(!(b.email && b.password)) {
       res.status(418).send({ message: "Enter an email AND password" });
     } else {
       const user = await User.findOne({email: b.email});
-        // check username exists in database
+        // check email exists in database
         if(!user){
           res.status(404).send({ message: `user not found.` });
         } else {
-          // if username exists then delete user
+          // if email exists then delete user
           await user.deleteOne(id);
           console.log(`user ${user.email} deleted`);
           res.status(202).send({ message: `user ${user.email} deleted` });
