@@ -1,6 +1,6 @@
 const User = require("./userModel");
 
-exports.addUser = async (req, res) => {
+exports.signup = async (req, res) => {
   try {
     const newUser = await User.create(req.body);
     res.status(200).send({ user: newUser.username });
@@ -12,11 +12,11 @@ exports.addUser = async (req, res) => {
   }
 };
 
-exports.findUser = async (req, res) => {
+exports.findOneUser = async (req, res) => {
   try {
     const users = await User.findOne(req.body) 
-    if(users == null){
-      res.status(400).send(`username not found.`)
+    if(!users){
+      res.status(404).send(`username not found.`)
     } else {
       res.status(200).send({ id: users.id, email: users.email, user: users.username })
     }
@@ -24,6 +24,24 @@ exports.findUser = async (req, res) => {
     console.log(error);
     res.status(550).send({ error: error.message })
   }
+};
+
+exports.deleteOneUser = async (req, res) => {
+  const b = req.body;
+  const id = req.params.id;
+  try {
+    const user = await User.findOne({username: b.username}) ;
+    if(!user){
+      res.status(404).send(`username not found.`);
+    } else {
+      await User.findOneAndDelete(id)
+      console.log(`user ${user.username} deleted`);
+      res.status(202).send({message: `user ${user.username} deleted`});
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(550).send({ error: error.message });
+  };
 };
 
 exports.login = async (req, res) => {
