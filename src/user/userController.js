@@ -76,7 +76,7 @@ exports.deleteOneUser = async (req, res) => {
   try {
     // check email and password are not null
     if(!(b.email && b.password)) {
-      res.status(418).send({ message: "Enter an email AND password" });
+      res.status(404).send({ message: "Enter an email AND password" });
     } else {
       // if email and password are not null
       const user = await User.findOne({email: b.email});
@@ -92,7 +92,7 @@ exports.deleteOneUser = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(550).send({ error: error.message });
+    res.status(500).send({ error: error.message });
   };
 };
 

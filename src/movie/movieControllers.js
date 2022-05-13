@@ -64,6 +64,6 @@ exports.deleteOneMovie = async (req, res) => {
     
     } catch (error) {
         console.log(error);
-        res.status(550).send({ error: error.message });
+        res.status(500).send({ error: error.message });
     };
 }
