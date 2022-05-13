@@ -1,6 +1,6 @@
 const User = require("./userModel");
 
-// CREATE operation POST
+// CREATE operation POST route/user/signup
 exports.signup = async (req, res) => {
   try {
     const newUser = await User.create(req.body);
@@ -13,9 +13,11 @@ exports.signup = async (req, res) => {
   }
 };
 
-// READ operation GET
+// READ operation GET route/user/find
 exports.findOneUser = async (req, res) => {
   try {
+    // username OR email will return user if exists
+    // if username AND email both MUST match to return user
     const user = await User.findOne(req.body);
     if(!user){
       res.status(404).send({ message:`user was not found.` });
@@ -28,11 +30,11 @@ exports.findOneUser = async (req, res) => {
   }
 };
 
-// READ operation GET
+// READ operation GET route/user/list
 exports.listUsers = async (req, res) => {
   try {
-    const users = await User.find({});
-    if(users){
+    const users = await User.find(req.body);
+    if(!users){
       res.status(404).send({ message:`no user data found.` });
     } else {
       res.status(200).send({ users });
@@ -43,7 +45,7 @@ exports.listUsers = async (req, res) => {
   }
 };
 
-// UPDATE operation PATCH
+// UPDATE operation PATCH 
 exports.updateOneUser = async (req, res) => {
   const b = req.body;
   // const id = req.params.id; // can't get id WHY?
