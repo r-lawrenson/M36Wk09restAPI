@@ -1,5 +1,5 @@
 {
-  "name": "wk09restapi",
+  "name": "week9day1",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,15 +8,23 @@
     "dev": "nodemon src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JadeyyLou/week9Day1.git"
+  },
+  "keywords": [],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JadeyyLou/week9Day1/issues"
+  },
+  "homepage": "https://github.com/JadeyyLou/week9Day1#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.18.1",
-    "mongoose": "^6.3.2"
-  },
-  "devDependencies": {
+    "mongoose": "^6.3.2",
     "nodemon": "^2.0.16"
   }
 }
