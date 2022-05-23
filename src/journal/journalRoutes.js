@@ -1,6 +1,6 @@
 const { Router } = require('express') ;
 
-const { addEntry, listEntrys, updateEntry, deleteEntry } = require('./journalController')
+const { addEntry, listEntrys, updateEntry, deleteEntry, searchJournal } = require('./journalController')
 
 const journalRouter = Router()
 
