@@ -4,7 +4,7 @@ const Journal = require('./journalModel')
 exports.addEntry = async (req, res) => {
 	try {
 		const newEntry = await Journal.create(req.body)
-		res.status(200).send({ title: newEntry.entry })
+		res.status(200).send({ title: newEntry.title })
 	} catch (error) {
 		console.log(error)
 		res.status(500).send({ error: error.message })
