@@ -6,7 +6,8 @@ const journalSchema = new mongoose.Schema({
 		required: true
 	},
 	entry: {
-		type: String
+		type: 'string',
+		required: true
 	}
 
 })
