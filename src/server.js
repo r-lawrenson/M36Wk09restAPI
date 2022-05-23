@@ -4,6 +4,7 @@ const cors = require('cors')
 const movieRouter = require('./movie/movieRoutes')
 const userRouter = require('./user/userRoutes')
 const loginRouter = require('./user/loginRoutes')
+const resourceRouter = require('./resources/resourceRoutes')
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -14,6 +15,13 @@ app.use(movieRouter);
 app.use(userRouter);
 app.use(loginRouter);
 
+
 app.listen(port, () => {
 	console.log(` Listening on port ${port}`);
 })
+
+
+
+
+
+//app.use(resourceRouter);
