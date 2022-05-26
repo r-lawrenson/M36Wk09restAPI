@@ -50,3 +50,12 @@ exports.deleteEntry = async (req, res) => {
 }
 
 // need to add a search ---> 
+
+exports.searchJournal = async (req, res) => {
+	try {
+		const search = await Journal.find({title: req.body.title})
+		res.status(200).send({ search })
+	} catch (error) {
+		console.log(error)
+	}
+}
