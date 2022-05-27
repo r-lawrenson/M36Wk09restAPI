@@ -16,7 +16,16 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	}
+	
 })
 
+// added this to the schema for use of jwt
+userSchema.methods.generateAuthToken = async function () {
+    const token = jwt.sign({_id: this._id}, process.env.SECRET, {});
+    this.tokens.push({ token });
+    await this.save();
+    return token;
+}
+// ---------------------------------------
 const User = mongoose.model('User', userSchema)
 module.exports = User

@@ -1,8 +1,8 @@
 const { Router } = require('express') ;
-const { login } = require('../middleware');
+const { login, tokenCheck } = require('../middleware');
 
 const loginRouter = Router();
 
-loginRouter.post('/login', login)
+loginRouter.post('/login', tokenCheck, login)
 
 module.exports = loginRouter;

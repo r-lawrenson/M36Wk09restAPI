@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const User = require("../user/userModel");
+const jwt  = require("jsonwebtoken")
 
 exports.hashPass = async (req, res, next) => {
     try {
@@ -26,38 +27,20 @@ exports.login = async (req, res, next) => {
    }
 }
 
-// exports.unHash = async (req, res, next) => {
-// 	try {
-// 		bcrypt.compareSync(req.body.password, hashPass, (err, res) => {})
-// 		if ( match ) {
-// 			console.log(unHash)
-// 		}
-// 	} catch (error) {
-// 		console.log(error);
-// 		res.status(500).send({ error: error.message })
-// 	}
-// }
-
-// exports.unHash = async (req, res, next) => {
-// 	try {
-// 		req.body.password = await unHash(req.body.password, 8);
-// 		next();
-// 	} catch (error) {
-// 		console.log(error);
-// 		res.status(500).send({ error:error.message});
-// 	}
-// }
-
-// exports.unHash = async (req, res, next) => {
-// 	try {
-// 		const unHashPass = bcrypt.compare(req.body.password)
-// 		if(isMatch) {
-// 			console.log(unHashPass);
-// 			console.log(hashPass)
-// 		} if (!isMatch) {
-// 			console.log(hashPass, 'is not encryption of ', password);
-// 		}
-// 	} catch (error) {
-		
-// 	}
-// }
+// added token check----------------------------------
+// this generates a unique token per user log in
+exports.tokenCheck = async (req, res, next) => {
+	try {
+		const token = req.header('Authorization');
+		const decodedToken = await jwt.verify(token, process.env.SECRET)
+		req.user = await User.findById(decodedToken.id)
+		if (req.user) {
+			next()
+		} else {
+			throw new Error('Invalid token')
+		}
+	} catch (error) {
+		console.log(error);
+		res.status(500).send({ error: error.message})
+	}
+}
