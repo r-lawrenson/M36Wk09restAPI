@@ -11,8 +11,9 @@ exports.hashPass = async (req, res, next) => {
         res.status(500).send({ error: error.message});
     }
 };
-
-exports.login = async (req, res, next) => {
+// renamed login
+exports.verifyUser = async (req, res, next) => {
+	const b = req.body
 	try {
 	const checkLogin = await User.findOne({ username: req.body.username });
 	if (await bcrypt.compare(req.body.password, checkLogin.password)) {
