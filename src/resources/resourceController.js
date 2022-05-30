@@ -14,7 +14,7 @@ exports.addResource = async (req, res) => {
 
 exports.listResource = async (req,res) => {
     try { 
-        const resource = await Resource.find({})
+        const resource = await Resource.find({keyword: req.body.keyword})
         res.status(200).send({resource})
 } catch (error) {
     console.log(error)
