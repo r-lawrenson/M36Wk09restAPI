@@ -12,21 +12,33 @@ exports.hashPass = async (req, res, next) => {
     }
 };
 // renamed login
-exports.verifyUser = async (req, res, next) => {
-	const b = req.body
-	try {
-	const checkLogin = await User.findOne({ username: req.body.username });
-	if (await bcrypt.compare(req.body.password, checkLogin.password)) {
-		res.status(200).send({message: 'Login successful!'});
-		next();
-	} else {
-		res.status(500).send({error: 'Login failed'})
-	}
-   } catch (error) {
-	   console.log(error);
-	   res.status(500).send({ error: error.message })
-   }
-}
+exports.decryptUser = async (req, res, next) => {
+    const b = req.body
+    try {
+        if (!b.username || !b.password) {
+            return res.status(400).send({message: `Please enter a username and password`});
+        } else {    
+            const user = await User.findOne({username: b.username});
+            if(user){
+                const result = await bcrypt.compare( b.password, user.password );
+                if(result) {
+                // console.log(result);
+                    const token = await jwt.sign({id: user._id}, process.env.SECRET)
+                    res.status(202).send({ username: user.username, token});
+                    next();
+                    } else {
+                // console.log(result);
+                    res.status(400).send({message: `Please enter vaild a username and password`});
+                    }
+            } else {
+                res.status(406).send({error: `Enter a valid username AND password.`});
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ error: error.message});
+    }
+};
 
 // added token check----------------------------------
 // this generates a unique token per user log in
