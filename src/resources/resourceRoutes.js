@@ -5,9 +5,9 @@ const { addResource, listResource, updateResource, updateResourceWeb, updateReso
 const resourceRouter = Router
 ();
 
-resourceRouter.post('/resource', addResource)
+resourceRouter.post('/addresource', addResource)
 
-resourceRouter.get('/resource', listResource)
+resourceRouter.post('/resource', listResource)
 
 resourceRouter.patch('/resource', updateResource)
 
