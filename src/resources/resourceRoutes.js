@@ -7,7 +7,7 @@ const resourceRouter = Router
 
 resourceRouter.post('/addresource', addResource)
 
-resourceRouter.post('/resource', listResource)
+resourceRouter.post('/resource/list', listResource)
 
 resourceRouter.patch('/resource', updateResource)
 
