@@ -1,11 +1,11 @@
 const { Router } = require('express') ;
 const { hashPass, verifyUser } = require('../middleware');
 
-const { login, addUser, listUsers, updateUser, deleteUser } = require('./userController')
-
+const { addUser, listUsers, updateUser, deleteUser } = require('./userController')
+const { decryptUser } = require(`../middleware`)
 const userRouter = Router();
 
-userRouter.get('/login', verifyUser, login); // moved from login routes
+userRouter.get('/login', decryptUser); // moved from login routes
 userRouter.post('/signup', hashPass, addUser)
 userRouter.get('/user', hashPass, listUsers)
 userRouter.patch('/resetpassword', hashPass, updateUser)
