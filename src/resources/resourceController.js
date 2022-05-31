@@ -10,7 +10,7 @@ exports.addResource = async (req, res) => {
             error:error.message
         })
     }
-}
+};
 
 exports.listResource = async (req,res) => {
     try { 
@@ -22,7 +22,7 @@ exports.listResource = async (req,res) => {
         error:error.message
     })
 }
-}
+};
 
 exports.updateResource = async (req, res) => {
 	try {
@@ -41,7 +41,7 @@ exports.updateResource = async (req, res) => {
 		res.status(500).send({ error: error.message })
 	}
 
-}
+};
 
 exports.updateResourceWeb = async (req, res) => {
 	try {
@@ -60,7 +60,7 @@ exports.updateResourceWeb = async (req, res) => {
 		res.status(500).send({ error: error.message })
 	}
 
-}
+};
 
 exports.updateResourceHelp = async (req, res) => {
 	try {
@@ -79,7 +79,7 @@ exports.updateResourceHelp = async (req, res) => {
 		res.status(500).send({ error: error.message })
 	}
 
-}
+};
 
 exports.updateResourceKeywords = async (req, res) => {
 	try {
@@ -98,15 +98,15 @@ exports.updateResourceKeywords = async (req, res) => {
 		res.status(500).send({ error: error.message })
 	}
 
-}
+};
 
 exports.deleteResource = async (req, res) => {
 	try {
-		const remove = await Resource.remove(
+		const remove = await Resource.deleteOne(
 			{username: req.body.username})
 			res.status(200).send({ remove })
 	} catch (error) {
 		console.log(error)
 		res.status(500).send({ error: error.message })
 	}
-}
+};
