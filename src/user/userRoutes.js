@@ -7,7 +7,7 @@ userRouter.get('/login', decryptUser, login ); // moved from login routes
 userRouter.post('/signup', hashPass, addUser)
 userRouter.get('/list', listUser); // renamed route to list
 userRouter.patch('/resetpassword', hashPass, updateUser)
-userRouter.delete('/delete', deleteUser)
+userRouter.delete('/delete', decryptUser, deleteUser);
 
 
 
