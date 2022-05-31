@@ -10,7 +10,7 @@ const journalSchema = new mongoose.Schema({
 		required: true
 	}
 
-})
+});
 
 const Journal = mongoose.model('Journal' , journalSchema)
 module.exports = Journal
