@@ -19,6 +19,7 @@ const resourceSchema = new mongoose.Schema({
     keywords: {
         type:String,
         required:true,
+		type:Array,
     }
 })
 
