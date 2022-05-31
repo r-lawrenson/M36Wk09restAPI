@@ -14,19 +14,21 @@ exports.hashPass = async (req, res, next) => {
 // renamed login
 exports.decryptUser = async (req, res, next) => {
     const b = req.body
+	// const user = req.user // 500 error assignment to constant variable don't know where from
     try {
         if (!b.username || !b.password) {
             return res.status(400).send({message: `Please enter a username and password`});
         } else {    
-            const user = await User.findOne({username: b.username});
-            if(user){
-                const result = await bcrypt.compare( b.password, user.password );
+            req.user = await User.findOne({username: b.username}); // error line 22
+            if(req.user){
+                const result = await bcrypt.compare( b.password, req.user.password );
                 if(result) {
                 // console.log(result);
-                    const token = await jwt.sign({id: user._id}, process.env.SECRET)
-                    res.status(202).send({ username: user.username, token});
-                    next();
-                    } else {
+					// moved to login
+                    // const token = await jwt.sign({id: user._id}, process.env.SECRET);
+                    // res.status(202).send({ username: user.username, token});
+					next();
+                } else {
                 // console.log(result);
                     res.status(400).send({message: `Please enter vaild a username and password`});
                     }
@@ -36,7 +38,7 @@ exports.decryptUser = async (req, res, next) => {
         }
     } catch (error) {
         console.log(error);
-        res.status(500).send({ error: error.message});
+        res.status(519).send({ error: error.message});
     }
 };
 

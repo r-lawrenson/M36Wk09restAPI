@@ -19,7 +19,12 @@ exports.addUser = async (req, res) => {
 
 exports.login = async (req, res) => {
 	try {
-		res.status(200).send({user: req.user})
+		// const user = req.user // 500 error assignment to constant variable don't know where from
+		const token = await jwt.sign({ id: req.user._id }, process.env.SECRET);
+		// give me a username... finally
+		res.status(202).send({ username: req.user.username, token});
+		// res.status(202).send({ user: req.user, token});
+		// res.status(200).send({user: req.user})
 	} catch (error) {
 		console.log(error)
 		res.status(400).send({messgae: 'login failed'})
