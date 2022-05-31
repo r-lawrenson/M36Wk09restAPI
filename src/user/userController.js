@@ -85,7 +85,6 @@ exports.updateUser = async (req, res) => {
 		console.log(error)
 		res.status(500).send({ error: error.message })
 	}
-
 }
 
 // DELETE operation DELETE
@@ -99,20 +98,22 @@ exports.deleteUser = async (req, res) => {
 		res.status(418).send({ message: "Enter a username, email AND password" });
 	  } else {
 		// if email and password are not null
-		const user = await User.findOne({email: b.email});
+		const user = await User.findOne({ email: b.email });
 		  // check email exists in database
-		  if(!user){
-			res.status(404).send({ message: `user not found.` });
-		  } else {
-			// if email exists then delete user
+		  if(user.username == b.username && user.email == b.email){
+			// if username and email exists then delete user
 			await user.deleteOne(id);
 			console.log(`user ${user.email} deleted`);
 			res.status(202).send({ message: `user ${user.email} deleted` });
+		  } else {
+			// else send error message
+			res.status(404).send({ message: `user not found.` });
 		  }
 	  }
 	} catch (error) {
 	  console.log(error);
-	  res.status(550).send({ error: error.message });
+	  // if email dosent exist returns this error
+	  res.status(550).send({ message: `user not found.` });
 	};
   };
 
