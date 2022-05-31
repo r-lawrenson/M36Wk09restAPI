@@ -1,15 +1,13 @@
 const { Router } = require('express') ;
-const { hashPass } = require('../middleware');
-
-const { addUser, listUsers, updateUser, deleteUser } = require('./userController')
-
+const { hashPass, decryptUser } = require('../middleware');
+const { addUser, listUser, updateUser, deleteUser, login } = require('./userController')
 const userRouter = Router();
 
-
+userRouter.get('/login', decryptUser, login ); // moved from login routes
 userRouter.post('/signup', hashPass, addUser)
-userRouter.get('/user', hashPass, listUsers)
+userRouter.get('/list', listUser); // renamed route to list
 userRouter.patch('/resetpassword', hashPass, updateUser)
-userRouter.delete('/user', hashPass, deleteUser)
+userRouter.delete('/delete', decryptUser, deleteUser); // added decrypt
 
 
 

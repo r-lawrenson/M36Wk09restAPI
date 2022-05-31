@@ -11,21 +11,36 @@ exports.hashPass = async (req, res, next) => {
         res.status(500).send({ error: error.message});
     }
 };
-
-exports.login = async (req, res, next) => {
-	try {
-	const checkLogin = await User.findOne({ username: req.body.username });
-	if (await bcrypt.compare(req.body.password, checkLogin.password)) {
-		res.status(200).send({message: 'Login successful!'});
-		next();
-	} else {
-		res.status(500).send({error: 'Login failed'})
-	}
-   } catch (error) {
-	   console.log(error);
-	   res.status(500).send({ error: error.message })
-   }
-}
+// renamed login
+exports.decryptUser = async (req, res, next) => {
+    const b = req.body
+	// const user = req.user // 500 error assignment to constant variable don't know where from
+    try {
+        if (!b.username || !b.password) {
+            return res.status(400).send({message: `Please enter a username and password`});
+        } else {    
+            req.user = await User.findOne({username: b.username}); // error line 22
+            if(req.user){
+                const result = await bcrypt.compare( b.password, req.user.password );
+                if(result) {
+                // console.log(result);
+					// moved to login
+                    // const token = await jwt.sign({id: user._id}, process.env.SECRET);
+                    // res.status(202).send({ username: user.username, token});
+					next();
+                } else {
+                // console.log(result);
+                    res.status(400).send({message: `Please enter vaild a username and password`});
+                    }
+            } else {
+                res.status(406).send({error: `Enter a valid username AND password.`});
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(519).send({ error: error.message});
+    }
+};
 
 // added token check----------------------------------
 // this generates a unique token per user log in
