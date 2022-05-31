@@ -19,7 +19,12 @@ exports.addUser = async (req, res) => {
 
 exports.login = async (req, res) => {
 	try {
-		res.status(200).send({user: req.user})
+		// const user = req.user // 500 error assignment to constant variable don't know where from
+		const token = await jwt.sign({ id: req.user._id }, process.env.SECRET);
+		// give me a username... finally
+		res.status(202).send({ username: req.user.username, token});
+		// res.status(202).send({ user: req.user, token});
+		// res.status(200).send({user: req.user})
 	} catch (error) {
 		console.log(error)
 		res.status(400).send({messgae: 'login failed'})
@@ -38,15 +43,33 @@ exports.logout = async (req, res) => {
 	}
 }
 
-exports.listUsers = async (req, res) => {
+// LIST ONE by username or email as username and email are unique there can be only one
+exports.listUser = async (req, res) => {
 	try {
-		const users = await User.find({})
-		res.status(200).send({ users })
-	} catch (error) {
-		console.log(error)
-		res.status(500).send({ error: error.message })
+		// rename users to user as only finding one
+	  	const user = await User.find(req.body);
+	  	if(!user || user.length === 0){
+			// check if no users or empty array
+			res.status(404).send({ message:`no user data found.` });
+	  	} else {
+		res.status(200).send({ user });
+	  	}
+	} 	catch (error) {
+			console.log(error);
+			res.status(550).send({ error: error.message });
 	}
-}
+  };
+
+// LIST ALL
+// exports.listUsers = async (req, res) => {
+// 	try {
+// 		const users = await User.find({})
+// 		res.status(200).send({ users })
+// 	} catch (error) {
+// 		console.log(error)
+// 		res.status(500).send({ error: error.message })
+// 	}
+// }
 
 exports.updateUser = async (req, res) => {
 	try {
@@ -62,19 +85,49 @@ exports.updateUser = async (req, res) => {
 		console.log(error)
 		res.status(500).send({ error: error.message })
 	}
-
 }
 
+// DELETE operation DELETE
 exports.deleteUser = async (req, res) => {
+	// username, email AND password required
+	const b = req.body;
+	const id = req.params.id;
 	try {
-		const remove = await User.remove(
-			{title: req.body.username})
-			res.status(200).send({ remove })
+	  // check username, email and password are not null
+	  if(!(b.username && b.email && b.password)) {
+		res.status(418).send({ message: "Enter a username, email AND password" });
+	  } else {
+		// if email and password are not null
+		const user = await User.findOne({ email: b.email });
+		  // check email exists in database
+		  if(user.username == b.username && user.email == b.email){
+			// if username and email exists then delete user
+			await user.deleteOne(id);
+			console.log(`user ${user.email} deleted`);
+			res.status(202).send({ message: `user ${user.email} deleted` });
+		  } else {
+			// else send error message
+			res.status(404).send({ message: `user not found.` });
+		  }
+	  }
 	} catch (error) {
-		console.log(error)
-		res.status(500).send({ error: error.message })
-	}
-}
+	  console.log(error);
+	  // if email dosent exist returns this error
+	  res.status(550).send({ message: `user not found.` });
+	};
+  };
+
+// 
+// exports.deleteUser = async (req, res) => {
+// 	try {
+// 		const remove = await User.remove(
+// 			{title: req.body.username})
+// 			res.status(200).send({ remove })
+// 	} catch (error) {
+// 		console.log(error)
+// 		res.status(500).send({ error: error.message })
+// 	}
+// }
 
 
 
