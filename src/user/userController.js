@@ -88,16 +88,45 @@ exports.updateUser = async (req, res) => {
 
 }
 
+// DELETE operation DELETE
 exports.deleteUser = async (req, res) => {
+	// username, email AND password required
+	const b = req.body;
+	const id = req.params.id;
 	try {
-		const remove = await User.remove(
-			{title: req.body.username})
-			res.status(200).send({ remove })
+	  // check username, email and password are not null
+	  if(!(b.username && b.email && b.password)) {
+		res.status(418).send({ message: "Enter a username, email AND password" });
+	  } else {
+		// if email and password are not null
+		const user = await User.findOne({email: b.email});
+		  // check email exists in database
+		  if(!user){
+			res.status(404).send({ message: `user not found.` });
+		  } else {
+			// if email exists then delete user
+			await user.deleteOne(id);
+			console.log(`user ${user.email} deleted`);
+			res.status(202).send({ message: `user ${user.email} deleted` });
+		  }
+	  }
 	} catch (error) {
-		console.log(error)
-		res.status(500).send({ error: error.message })
-	}
-}
+	  console.log(error);
+	  res.status(550).send({ error: error.message });
+	};
+  };
+
+// 
+// exports.deleteUser = async (req, res) => {
+// 	try {
+// 		const remove = await User.remove(
+// 			{title: req.body.username})
+// 			res.status(200).send({ remove })
+// 	} catch (error) {
+// 		console.log(error)
+// 		res.status(500).send({ error: error.message })
+// 	}
+// }
 
 
 
