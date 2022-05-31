@@ -43,15 +43,33 @@ exports.logout = async (req, res) => {
 	}
 }
 
-exports.listUsers = async (req, res) => {
+// LIST ONE by username or email as username and email are unique there can be only one
+exports.listUser = async (req, res) => {
 	try {
-		const users = await User.find({})
-		res.status(200).send({ users })
-	} catch (error) {
-		console.log(error)
-		res.status(500).send({ error: error.message })
+		// rename users to user as only finding one
+	  	const user = await User.find(req.body);
+	  	if(!user || user.length === 0){
+			// check if no users or empty array
+			res.status(404).send({ message:`no user data found.` });
+	  	} else {
+		res.status(200).send({ user });
+	  	}
+	} 	catch (error) {
+			console.log(error);
+			res.status(550).send({ error: error.message });
 	}
-}
+  };
+
+// LIST ALL
+// exports.listUsers = async (req, res) => {
+// 	try {
+// 		const users = await User.find({})
+// 		res.status(200).send({ users })
+// 	} catch (error) {
+// 		console.log(error)
+// 		res.status(500).send({ error: error.message })
+// 	}
+// }
 
 exports.updateUser = async (req, res) => {
 	try {
